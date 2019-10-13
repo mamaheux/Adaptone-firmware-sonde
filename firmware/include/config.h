@@ -4,6 +4,12 @@
 #include <arpa/inet.h>
 #include <esp_log.h>
 
+#include <esp_eth.h>
+#include <eth_phy/phy_lan8720.h>
+
+#include <lwip/apps/sntp.h>
+
+// Logger
 #define MAIN_LOGGER_TAG "Main"
 #define MAIN_LOGGER_LEVEL ESP_LOG_DEBUG
 
@@ -13,6 +19,27 @@
 #define NETWORK_LOGGER_TAG "Network"
 #define NETWORK_LOGGER_LEVEL ESP_LOG_DEBUG
 
-#define STARTUP_DELAY_MS 1000
+// Ethernet
+#define CONFIG_ETHERNET_PHY_CONFIG phy_lan8720_default_ethernet_config
+#define CONFIG_ETHERNET_PHY_ADDRESS PHY0
+#define CONFIG_ETHERNET_PHY_CLOCK_MODE ETH_CLOCK_GPIO0_IN
+#define CONFIG_ETHERNET_PIN_SMI_MDC 16
+#define CONFIG_ETHERNET_PIN_SMI_MDIO 17
+
+// Discovery
+#define CONFIG_DISCOVERY_SOCKET_CREATION_INTERVAL_MS 100
+#define CONFIG_DISCOVERY_PORT 5000
+#define CONFIG_DISCOVERY_RECEIVING_BUFFER_SIZE 1500
+#define CONFIG_DISCOVERY_TASK_STACK_SIZE 4096
+#define CONFIG_DISCOVERY_TASK_PRIORITY 2
+
+// SNTP
+#define CONFIG_SNTP_OPERATING_MODE SNTP_OPMODE_POLL
+#define CONFIG_SNTP_SERVER_NAME "pool.ntp.org"
+#define CONFIG_SNTP_TIME_ZONE "GMT" //UTC
+
+// Main
+#define CONFIG_STARTUP_DELAY_MS 1000
+#define CONFIG_UTC_LOG_INTERVAL_MS 10000
 
 #endif

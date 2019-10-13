@@ -9,7 +9,7 @@
 #include <time.h>
 
 #define STRFTIME_BUFFER_SIZE 64
-#define UTC_LOG_INTERVAL_MS 10000
+
 
 static void initializeLogger()
 {
@@ -35,7 +35,7 @@ static void logCurrentUtc()
 void app_main()
 {
     initializeLogger();
-    vTaskDelay(STARTUP_DELAY_MS / portTICK_PERIOD_MS);
+    vTaskDelay(CONFIG_STARTUP_DELAY_MS / portTICK_PERIOD_MS);
 
     ESP_LOGI(MAIN_LOGGER_TAG, "Initialization");
     initializeEvent();
@@ -48,6 +48,6 @@ void app_main()
     while(1)
     {
         logCurrentUtc();
-        vTaskDelay(UTC_LOG_INTERVAL_MS / portTICK_PERIOD_MS);
+        vTaskDelay(CONFIG_UTC_LOG_INTERVAL_MS / portTICK_PERIOD_MS);
     }
 }
