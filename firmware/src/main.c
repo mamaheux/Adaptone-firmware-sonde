@@ -1,6 +1,7 @@
 #include "config.h"
 #include "event.h"
 #include "network/ethernet.h"
+#include "network/discovery.h"
 
 #include <freertos/FreeRTOS.h>
 
@@ -16,11 +17,13 @@ void app_main()
     initializeLogger();
     vTaskDelay(STARTUP_DELAY_MS / portTICK_PERIOD_MS);
 
-    ESP_LOGI(MAIN_LOGGER_TAG, "Probe initialization");
+    ESP_LOGI(MAIN_LOGGER_TAG, "Initialization");
     initializeEvent();
     initializeEthernet();
+    initializeDiscovery();
 
-    ESP_LOGI(MAIN_LOGGER_TAG, "Main loop");
+    ESP_LOGI(MAIN_LOGGER_TAG, "Task start");
+    startDiscovery();
     while(1)
     {
         vTaskDelay(10 / portTICK_PERIOD_MS);
