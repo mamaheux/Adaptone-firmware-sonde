@@ -3,6 +3,7 @@
 #include "network/ethernet.h"
 #include "network/sntp.h"
 #include "network/discovery.h"
+#include "network/communication.h"
 
 #include <freertos/FreeRTOS.h>
 
@@ -15,6 +16,11 @@ static void initializeLogger()
     esp_log_level_set(MAIN_LOGGER_TAG, MAIN_LOGGER_LEVEL);
     esp_log_level_set(EVENT_LOGGER_TAG, EVENT_LOGGER_LEVEL);
     esp_log_level_set(NETWORK_LOGGER_TAG, NETWORK_LOGGER_LEVEL);
+}
+
+static void messageHandler(uint8_t* buffer, size_t size)
+{
+    ESP_LOGI(MAIN_LOGGER_TAG, "Message received");
 }
 
 static void logCurrentUtc()
@@ -41,9 +47,12 @@ void app_main()
     initializeEthernet();
     initializeStnp();
     initializeDiscovery();
+    initializeCommunication(messageHandler);
 
     ESP_LOGI(MAIN_LOGGER_TAG, "Task start");
     startDiscovery();
+    startCommunication();
+
     while(1)
     {
         logCurrentUtc();
