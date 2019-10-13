@@ -10,7 +10,6 @@
 
 #define STRFTIME_BUFFER_SIZE 64
 
-
 static void initializeLogger()
 {
     esp_log_level_set(MAIN_LOGGER_TAG, MAIN_LOGGER_LEVEL);
