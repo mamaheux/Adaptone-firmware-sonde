@@ -1,4 +1,5 @@
 #include "network/discovery.h"
+#include "network/utils.h"
 #include "config.h"
 
 #include <freertos/FreeRTOS.h>
@@ -16,12 +17,6 @@
 
 static struct sockaddr_in bindAddress;
 static uint8_t receivingBuffer[CONFIG_DISCOVERY_RECEIVING_BUFFER_SIZE];
-
-static void freeSocket(int socketHandle)
-{
-    shutdown(socketHandle, 0);
-    close(socketHandle);
-}
 
 static int createSocket()
 {
@@ -46,7 +41,6 @@ static int createSocket()
         freeSocket(socketHandle);
         return -1;
     }
-    ESP_LOGI(NETWORK_LOGGER_TAG, "Socket bound, port %d", CONFIG_DISCOVERY_PORT);
 
     return socketHandle;
 }
