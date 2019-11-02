@@ -59,6 +59,6 @@ void app_main()
     while(1)
     {
         logCurrentUtc();
-        vTaskDelay(2000 / portTICK_PERIOD_MS);
+        vTaskDelay(CONFIG_UTC_LOG_INTERVAL_MS / portTICK_PERIOD_MS);
     }
 }
