@@ -80,7 +80,7 @@ static void initAdc()
     gpio_set_level(CONFIG_SOUND_GPIO_OUTPUT_IO_FMT1, 0);
     
     gpio_set_level(CONFIG_SOUND_GPIO_OUTPUT_IO_OSR, 0); // SET OSR to x64    
-    gpio_set_level(CONFIG_SOUND_GPIO_OUTPUT_IO_BYPASS, 0); //SET BYPAS to normal mode (HPF activated)
+    gpio_set_level(CONFIG_SOUND_GPIO_OUTPUT_IO_BYPASS, 0); // Set BYPAS to normal mode (HPF activated)
 }
 
 static void initializeUdpMessageHeader()
