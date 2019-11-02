@@ -75,7 +75,7 @@ static void initAdc()
     gpio_set_level(CONFIG_SOUND_GPIO_OUTPUT_IO_MODE0, 1);
     gpio_set_level(CONFIG_SOUND_GPIO_OUTPUT_IO_MODE1, 1);
 
-    //set format to I2S
+    // Set format to I2S
     gpio_set_level(CONFIG_SOUND_GPIO_OUTPUT_IO_FMT0, 1);
     gpio_set_level(CONFIG_SOUND_GPIO_OUTPUT_IO_FMT1, 0);
     
