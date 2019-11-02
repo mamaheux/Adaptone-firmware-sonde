@@ -232,6 +232,7 @@ static int acceptConnection(int tcpListenerSocketHandle)
 
     udpClientSocketHandle = udpSocketHandle;
     memcpy(&clientAddress, &sourceAddress, sizeof(sourceAddress));
+    clientAddress.sin_port = htons(CONFIG_COMMUNICATION_UDP_PORT);
     tcpClientSocketHandle = tcpSocketHandle;
 
     xSemaphoreGive(clientMutex);
