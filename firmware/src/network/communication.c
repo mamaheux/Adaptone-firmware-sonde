@@ -23,8 +23,16 @@
 #define HEARTBEAT_SIZE 4
 #define HEARTBEAT_ID 4
 
+#define RECORD_SIZE 16
+#define RECORD_ID 5
+#define RECORD_HOUR_OFFSET 8
+#define RECORD_MINUTE_OFFSET 9
+#define RECORD_SECOND_OFFSET 10
+#define RECORD_MS_OFFSET 11
+#define RECORD_DURATION_MS_OFFSET 13
+#define RECORD_ID_OFFSET 15
 
-static MessageHandler messageHandler;
+static RecordMessageHandler recordMessageHandler;
 static struct sockaddr_in tcpListenerAddress;
 
 static struct sockaddr_in clientAddress;
@@ -259,6 +267,24 @@ static void sendHeartbeatMessage(int socketHandle)
     send(socketHandle, buffer, HEARTBEAT_SIZE, flags);
 }
 
+static int isRecordMessage(uint8_t* buffer, int size)
+{
+    return size == RECORD_SIZE &&
+        ntohl(*(uint32_t*)buffer) == RECORD_ID;
+}
+
+static void callRecordMessageHandler(uint8_t* buffer, int size)
+{
+    uint8_t recordHour = buffer[RECORD_HOUR_OFFSET];
+    uint8_t recordMinute = buffer[RECORD_MINUTE_OFFSET];
+    uint8_t recordSecond = buffer[RECORD_SECOND_OFFSET];
+    uint16_t recordMs = ntohs(*(uint16_t*)(buffer + RECORD_MS_OFFSET));
+    uint16_t durationMs = ntohs(*(uint16_t*)(buffer + RECORD_DURATION_MS_OFFSET));
+    uint8_t recordId = buffer[RECORD_ID_OFFSET];
+
+    recordMessageHandler(recordHour, recordMinute, recordSecond, recordMs, durationMs, recordId);
+}
+
 static void handleMessages()
 {
     uint32_t lastHeatbeatTimestamp = esp_log_timestamp();
@@ -277,9 +303,9 @@ static void handleMessages()
             sendHeartbeatMessage(tcpClientSocketHandle);
             lastHeatbeatTimestamp = esp_log_timestamp();
         }
-        else if (size > 0)
+        else if (isRecordMessage(receivingBuffer, size))
         {
-            messageHandler(receivingBuffer, size);
+            callRecordMessageHandler(receivingBuffer, size);
         }
 
         if ((esp_log_timestamp() - lastHeatbeatTimestamp) > CONFIG_COMMUNICATION_HEARTBEAT_TIMEOUT_MS)
@@ -325,10 +351,10 @@ static void communicationTask(void* parameters)
     vTaskDelete(NULL);
 }
 
-void initializeCommunication(MessageHandler userMessageHandler)
+void initializeCommunication(RecordMessageHandler userRecordMessageHandler)
 {
     ESP_LOGI(NETWORK_LOGGER_TAG, "Communication initialization");
-    messageHandler = userMessageHandler;
+    recordMessageHandler = userRecordMessageHandler;
 
     tcpListenerAddress.sin_addr.s_addr = htonl(INADDR_ANY);
     tcpListenerAddress.sin_family = AF_INET;

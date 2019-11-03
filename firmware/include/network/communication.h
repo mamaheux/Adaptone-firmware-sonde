@@ -4,9 +4,14 @@
 #include <stdint.h>
 #include <stddef.h>
 
-typedef void (*MessageHandler)(uint8_t* buffer, size_t size);
+typedef void (*RecordMessageHandler)(uint8_t recordHour,
+    uint8_t recordMinute,
+    uint8_t recordSecond,
+    uint16_t recordMs,
+    uint16_t durationMs,
+    uint8_t recordId);
 
-void initializeCommunication(MessageHandler messageHandler);
+void initializeCommunication(RecordMessageHandler recordMessageHandler);
 void startCommunication();
 
 void sendTcp(uint8_t* buffer, size_t size);
