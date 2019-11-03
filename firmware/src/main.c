@@ -19,11 +19,6 @@ static void initializeLogger()
     esp_log_level_set(SOUND_LOGGER_TAG, SOUND_LOGGER_LEVEL);
 }
 
-static void messageHandler(uint8_t* buffer, size_t size)
-{
-    ESP_LOGI(MAIN_LOGGER_TAG, "Message received");
-}
-
 static void logCurrentUtc()
 {
     char buffer[STRFTIME_BUFFER_SIZE];
@@ -48,7 +43,7 @@ void app_main()
     initializeEthernet();
     initializeStnp();
     initializeDiscovery();
-    initializeCommunication(messageHandler);
+    initializeCommunication(recordSound);
     initializeSound();
 
     ESP_LOGI(MAIN_LOGGER_TAG, "Task start");
