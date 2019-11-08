@@ -268,6 +268,12 @@ void recordSound(uint8_t requestedRecordHour,
     uint16_t requestedRecordDurationMs,
     uint8_t requestedRecordRecordId)
 {
+    if (requestedRecordDurationMs == 0)
+    {
+        ESP_LOGE(SOUND_LOGGER_TAG, "Invalid duration");
+        return;
+    }
+
     recordHour = requestedRecordHour;
     recordMinute = requestedRecordMinute;
     recordSecond = requestedRecordSecond;
